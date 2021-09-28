@@ -9,14 +9,17 @@ import com.example.sample_video.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-  private ActivityMainBinding binding;
+  private ActivityMainBinding mBinding;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    binding = ActivityMainBinding.inflate(getLayoutInflater());
-    setContentView(binding.getRoot());
+    mBinding = ActivityMainBinding.inflate(getLayoutInflater());
+    setContentView(mBinding.getRoot());
 
+    mBinding.lottie.setImageAssetsFolder("images");
+    mBinding.lottie.setAnimation("data.json");
+    mBinding.lottie.playAnimation();
   }
 
 
