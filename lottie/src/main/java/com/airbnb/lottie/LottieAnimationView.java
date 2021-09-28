@@ -1242,4 +1242,10 @@ import java.util.concurrent.Callable;
           }
         };
   }
+
+  /** LINE: 以下为个人新增方法 ---------------------------------------------------------- */
+
+  public LottieDrawable getLottieDrawable(){
+    return lottieDrawable;
+  }
 }
