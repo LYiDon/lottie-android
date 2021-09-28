@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/lottie-compose/lottie-android.lottie-compose.iml" filepath="$PROJECT_DIR$/.idea/modules/lottie-compose/lottie-android.lottie-compose.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample/lottie-android.sample.iml" filepath="$PROJECT_DIR$/.idea/modules/sample/lottie-android.sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample-compose/lottie-android.sample-compose.iml" filepath="$PROJECT_DIR$/.idea/modules/sample-compose/lottie-android.sample-compose.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/sample-video/lottie-android.sample-video.iml" filepath="$PROJECT_DIR$/.idea/modules/sample-video/lottie-android.sample-video.iml" />
     </modules>
   </component>
 </project>
