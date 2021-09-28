@@ -1,17 +1,26 @@
 package com.airbnb.lottie.manager;
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.Nullable;
+
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 
 import com.airbnb.lottie.ImageAssetDelegate;
 import com.airbnb.lottie.LottieImageAsset;
 import com.airbnb.lottie.utils.Logger;
 import com.airbnb.lottie.utils.Utils;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -105,7 +114,13 @@ public class ImageAssetManager {
         throw new IllegalStateException("You must set an images folder before loading an image." +
             " Set it with LottieComposition#setImagesFolder or LottieDrawable#setImagesFolder");
       }
-      is = context.getAssets().open(imagesFolder + filename);
+      Log.e("Lottie自定义"," 加载图片路径 "+filename);
+      if(!TextUtils.isEmpty(filename)&&(filename.indexOf("/storage/emulated/")==0)){
+        FileInputStream fis=new FileInputStream(filename);
+        is = fis;
+      }else {
+        is = context.getAssets().open(imagesFolder + filename);
+      }
     } catch (IOException e) {
       Logger.warning("Unable to open asset.", e);
       return null;
@@ -131,4 +146,5 @@ public class ImageAssetManager {
       return bitmap;
     }
   }
+
 }

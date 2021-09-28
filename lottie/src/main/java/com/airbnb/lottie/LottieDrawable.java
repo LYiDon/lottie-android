@@ -14,6 +14,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -1117,6 +1118,7 @@ public class LottieDrawable extends Drawable implements Drawable.Callback, Anima
     }
 
     if (imageAssetManager == null) {
+      Log.e("lyd"," 创建 imageAssetManager");
       imageAssetManager = new ImageAssetManager(getCallback(),
           imageAssetsFolder, imageAssetDelegate, composition.getImages());
     }
