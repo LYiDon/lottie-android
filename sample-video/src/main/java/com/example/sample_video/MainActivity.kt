@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         mBinding.save.setOnClickListener {
             val videoFile = getPath(false)
             Log.e("lyd", videoFile.toString())
-            val recorder = Recorder(videoOutput = videoFile)
+            val recorder = Recorder(this,videoOutput = videoFile)
             val frameCreator = FrameCreator(mBinding.lottie.lottieDrawable)
             val operation = RecordingOperation(recorder,frameCreator){
                 openCreatedVideo(videoFile)

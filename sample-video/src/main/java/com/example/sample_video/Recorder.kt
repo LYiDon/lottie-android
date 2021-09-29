@@ -1,6 +1,9 @@
 package com.example.sample_video
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.AssetFileDescriptor
+import android.content.res.AssetManager
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
@@ -13,8 +16,13 @@ import android.view.Surface
 import java.io.Closeable
 import java.io.File
 import java.nio.ByteBuffer
+import android.media.MediaExtractor
+
+
+
 
 class Recorder(
+ val context:Context,
   mimeType: String = "video/avc",
   bitRate: Int = DEFAULT_BITRATE,
   iFrameInterval: Int = DEFAULT_IFRAME_INTERVAL,
@@ -32,6 +40,11 @@ class Recorder(
   private var muxerStarted: Boolean = false
   private var fakePts: Long = 0
   private var videoLengthInMs: Long = 0
+
+  val mAudioExtractor = MediaExtractor()
+  var audioTrackIndex = -1
+
+
 
   companion object {
     private const val VERBOSE = false
@@ -69,12 +82,15 @@ class Recorder(
     createMediaMuxer(videoOutput)
   }
 
+  /**
+   * 将当前帧绘制到MediaCodec中的Surface的canvas中
+   */
   fun nextFrame(currentFrame: Drawable) {
     drainEncoder(false)
-    val canvas = inputSurface.lockCanvas(null)
+    val canvas = inputSurface.lockCanvas(null) //从Surface中获取Canvas
     try {
       canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)  // Here you need to set some kind of background. Could be any color
-      currentFrame.draw(canvas)
+      currentFrame.draw(canvas) //提供画布给drawable绘制
     } finally {
       inputSurface.unlockCanvasAndPost(canvas)
     }
@@ -92,6 +108,8 @@ class Recorder(
         output.toString(),
         MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4
     )
+
+    Log.e("lyd"," MediaMuxer 初始化");
 
     trackIndex = -1
     muxerStarted = false
@@ -177,6 +195,7 @@ class Recorder(
     Log.d("TAG", "videoEncoder inputSurface format changed: $newFormat")
 
     trackIndex = muxer.addTrack(newFormat)
+    startAudio()
     muxer.start()
     muxerStarted = true
   }
@@ -227,7 +246,51 @@ class Recorder(
     videoEncoder.stop()
     videoEncoder.release()
     inputSurface.release()
+    Log.e("lyd"," 释放播放器 ")
     muxer.stop()
     muxer.release()
+  }
+
+  /**音频 ----------------------------------------------------------------- */
+   fun startAudio(){
+    // 音频的MediaExtractor
+    // 音频的MediaExtractor
+//    mAudioExtractor.setDataSource("images/aud_0.mp3")
+    val p = context.assets.openFd("images/aud_1.m4a")
+    mAudioExtractor.setDataSource(p)
+    for (i in 0 until mAudioExtractor.trackCount) {
+      val format = mAudioExtractor.getTrackFormat(i)
+      if (format.getString(MediaFormat.KEY_MIME)!!.startsWith("audio/")) {
+        mAudioExtractor.selectTrack(i)
+        printInit("马上执行 ")
+        audioTrackIndex = muxer.addTrack(format)
+      }
+    }
+  }
+
+   fun encoderAudio(){
+    // 封装音频track
+    // 封装音频track
+    if (-1 != audioTrackIndex) {
+      val info = MediaCodec.BufferInfo()
+      info.presentationTimeUs = 0
+      val buffer = ByteBuffer.allocate(100 * 1024)
+      while (true) {
+        val sampleSize: Int = mAudioExtractor.readSampleData(buffer, 0)
+        if (sampleSize < 0) {
+          break
+        }
+        info.offset = 0
+        info.size = sampleSize
+        info.flags = MediaCodec.BUFFER_FLAG_SYNC_FRAME
+        info.presentationTimeUs = mAudioExtractor.getSampleTime()
+        muxer.writeSampleData(audioTrackIndex, buffer, info)
+        mAudioExtractor.advance()
+      }
+    }
+  }
+
+  fun printInit(tag:String){
+    Log.e("lyd","${tag}初始化状态${this::muxer.isInitialized}")
   }
 }

@@ -9,13 +9,18 @@ class RecordingOperation(
     private val listener: () -> Unit
 ) {
 
-  fun start() {
-    while (isRecording()) {
-      recorder.nextFrame(frameCreator.generateFrame())
-    }
-    recorder.end()
-    listener()
-  }
+    fun start() {
 
-  private fun isRecording() = !frameCreator.hasEnded()
+        recorder.printInit("开始 ")
+        while (isRecording()) { //循环所有帧
+            recorder.nextFrame(frameCreator.generateFrame())
+            recorder.printInit("循环 ")
+        }
+        recorder.printInit("结束 ")
+        recorder.encoderAudio()
+        recorder.end()
+        listener()
+    }
+
+    private fun isRecording() = !frameCreator.hasEnded()
 }
