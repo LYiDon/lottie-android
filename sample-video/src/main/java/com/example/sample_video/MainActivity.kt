@@ -18,12 +18,12 @@ class MainActivity : AppCompatActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
-        mBinding.lottie.imageAssetsFolder = "images"
-        mBinding.lottie.setAnimation("data.json")
+        mBinding.lottie.imageAssetsFolder = "images4"
+        mBinding.lottie.setAnimation("data4.json")
         mBinding.lottie.playAnimation()
 
         mBinding.save.setOnClickListener {
-            val videoFile = getPath(false)
+            val videoFile = getPath(true)
             Log.e("lyd", videoFile.toString())
             val recorder = Recorder(this,videoOutput = videoFile)
             val frameCreator = FrameCreator(mBinding.lottie.lottieDrawable)

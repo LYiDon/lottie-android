@@ -256,7 +256,8 @@ class Recorder(
     // 音频的MediaExtractor
     // 音频的MediaExtractor
 //    mAudioExtractor.setDataSource("images/aud_0.mp3")
-    val p = context.assets.openFd("images/aud_1.m4a")
+//    val p = context.assets.openFd("images/aud_1.m4a")
+    val p = context.assets.openFd("images4/aud_0.m4a")
     mAudioExtractor.setDataSource(p)
     for (i in 0 until mAudioExtractor.trackCount) {
       val format = mAudioExtractor.getTrackFormat(i)
