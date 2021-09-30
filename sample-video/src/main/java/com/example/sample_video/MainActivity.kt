@@ -18,8 +18,8 @@ class MainActivity : AppCompatActivity() {
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
-        mBinding.lottie.imageAssetsFolder = "images4"
-        mBinding.lottie.setAnimation("data4.json")
+        mBinding.lottie.imageAssetsFolder = "images8"
+        mBinding.lottie.setAnimation("data8.json")
         mBinding.lottie.playAnimation()
 
         mBinding.save.setOnClickListener {
